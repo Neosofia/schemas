@@ -9,7 +9,6 @@ import sys
 from pathlib import Path
 
 from jsonschema import validators
-from jsonschema.exceptions import ValidationError
 
 REPO = Path(__file__).resolve().parent.parent
 EXAMPLES = REPO / "examples"

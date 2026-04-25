@@ -36,7 +36,12 @@ jsonschema.validate(log_entry, schema)
 3. Add example documents under `examples/<schema-stem>/`:
    - `valid-*.json` — must pass validation
    - `invalid-*.json` — must fail validation
-4. CI runs on every PR:
+4. Run validation locally before opening a PR:
+   ```
+   uv sync
+   uv run scripts/validate_examples.py
+   ```
+5. CI runs on every PR:
    - Every `*.json` is checked as a valid JSON Schema (dialect auto-detected)
    - Every example is validated against its schema and asserted to behave as named
    - Modifications/deletions of existing `*-v*.json` files are blocked

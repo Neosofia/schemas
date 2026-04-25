@@ -12,12 +12,12 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: actions/setup-python@v6
+      - uses: astral-sh/setup-uv@v6
         with:
-          python-version: "3.12"
+          enable-cache: true
 
-      - name: Install jsonschema
-        run: pip install --quiet jsonschema
+      - name: Sync dependencies
+        run: uv sync --frozen
 
       - name: Validate every *.json is a valid JSON Schema
         run: |
@@ -25,7 +25,7 @@ jobs:
           shopt -s nullglob
           for f in *.json; do
             echo "Checking $f"
-            python -c "
+            uv run python -c "
           import json, sys
           from jsonschema import validators
           schema = json.load(open('$f'))
@@ -39,15 +39,15 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: actions/setup-python@v6
+      - uses: astral-sh/setup-uv@v6
         with:
-          python-version: "3.12"
+          enable-cache: true
 
-      - name: Install jsonschema
-        run: pip install --quiet jsonschema
+      - name: Sync dependencies
+        run: uv sync --frozen
 
       - name: Validate examples against their schemas
-        run: python scripts/validate_examples.py
+        run: uv run scripts/validate_examples.py
 
   immutability:
     name: Published schemas are not modified
