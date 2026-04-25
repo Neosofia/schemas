@@ -1,0 +1,73 @@
+name: validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  schema-validity:
+    name: JSON Schemas are valid
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install jsonschema
+        run: pip install --quiet jsonschema
+
+      - name: Validate every *.json is a valid JSON Schema
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          for f in *.json; do
+            echo "Checking $f"
+            python -c "
+          import json, sys
+          from jsonschema import validators
+          schema = json.load(open('$f'))
+          validators.validator_for(schema).check_schema(schema)
+          "
+          done
+
+  examples:
+    name: Examples behave as expected
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install jsonschema
+        run: pip install --quiet jsonschema
+
+      - name: Validate examples against their schemas
+        run: python scripts/validate_examples.py
+
+  immutability:
+    name: Published schemas are not modified
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Block edits to existing *-v*.json files
+        run: |
+          set -euo pipefail
+          base="${{ github.event.pull_request.base.sha }}"
+          head="${{ github.event.pull_request.head.sha }}"
+          # Files matching *-v*.json that were Modified or Deleted (not Added)
+          changed=$(git diff --name-only --diff-filter=MD "$base" "$head" -- '*-v*.json' || true)
+          if [[ -n "$changed" ]]; then
+            echo "::error::Published schemas are immutable. Add a new version instead of modifying:"
+            echo "$changed"
+            exit 1
+          fi
+          echo "OK — no published schemas were modified."

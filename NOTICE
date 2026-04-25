@@ -1,0 +1,9 @@
+Neosofia Schemas
+Copyright 2026 Neosofia
+
+This product includes software developed at the OpenAPI Initiative
+(https://www.openapis.org/), a Linux Foundation project.
+
+The file `openapi-v3.0.json` is a verbatim copy of the OpenAPI 3.0 JSON
+Schema published at https://spec.openapis.org/oas/3.0/schema/2024-10-18,
+distributed under the Apache License, Version 2.0.

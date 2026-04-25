@@ -1,0 +1,49 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/neosofia/schemas/main/log-v1.0.0.json",
+  "title": "Log Entry",
+  "description": "JSON Schema for platform logs. All services must emit logs conforming to this structure.",
+  "type": "object",
+  "required": ["timestamp", "level", "message"],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of the log entry"
+    },
+    "level": {
+      "type": "string",
+      "enum": ["DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL"],
+      "description": "Log level"
+    },
+    "message": {
+      "type": "string",
+      "description": "Human-readable log message"
+    },
+    "event_type": {
+      "type": "string",
+      "description": "Optional event type for structured logging (e.g., 'platform_token_issued', 'health_check_failed')"
+    },
+    "actor": {
+      "type": "string",
+      "description": "URI identifying who triggered the event: {type}:{id} (e.g. 'clinician:usr_abc123', 'service:auth-worker')"
+    },
+    "reason": {
+      "type": "string",
+      "description": "Machine-readable reason code or short explanation (e.g. 'bad_secret', 'role not in allow-list')"
+    },
+    "trace_id": {
+      "type": "string",
+      "description": "W3C trace ID — 32-char lowercase hex. Correlates a request across services."
+    },
+    "span_id": {
+      "type": "string",
+      "description": "W3C span ID — 16-char lowercase hex. Identifies this unit of work within a trace."
+    },
+    "service": {
+      "type": "string",
+      "description": "Name of the service emitting the log (e.g. 'authentication')."
+    }
+  },
+  "additionalProperties": true
+}

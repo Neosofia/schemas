@@ -1,0 +1,16 @@
+# Editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Python (used only by CI validation)
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+
+# Local env overrides
+.env
+.env.*
+!.env.example

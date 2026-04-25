@@ -1,0 +1,10 @@
+{
+  "timestamp": "2026-04-25T14:32:11.123Z",
+  "level": "INFO",
+  "message": "platform token issued",
+  "event_type": "platform_token_issued",
+  "actor": "clinician:usr_abc123",
+  "trace_id": "4bf92f3577b34da6a3ce929d0e0e4736",
+  "span_id": "00f067aa0ba902b7",
+  "service": "authentication"
+}
